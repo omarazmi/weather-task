@@ -1,0 +1,39 @@
+.weather-app {
+  display: flex;
+  justify-content: space-around;   
+  align-items: center;
+  max-width: 500px;
+  height: 100px;
+
+}
+
+.left-container {}
+
+.right-container {
+  display: flex; 
+  align-items: center;
+}
+
+.right-container > .current-temp {
+  font-size: 50px;
+}
+.right-container > .temp-icon {
+  height: 70px; 
+  width: 70px; 
+  align-self: center;
+}
+
+.right-container > .sub-container {
+  margin-left: 10px;
+}
+
+.right-container > .sub-container > .temp-text {
+  font-size: 17px; 
+  font-weight: bold
+}
+
+h3, p, h1,h2{
+  color:#585757;
+  margin: 0;
+  padding: 0;
+}
