@@ -12,7 +12,7 @@ class WeatherContainer extends Component {
 
     componentDidMount() {
         this.props.getLocationWeatherInfo()
-        this.interval = setInterval(() => this.rotateCity(), 3000);
+        this.interval = setInterval(() => this.rotateCity(), 5000);
     }
 
     rotateCity() {
