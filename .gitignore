@@ -1,1 +1,4 @@
 /node_modules/
+/views/
+/assets/bundle.js
+/assets/client.js
