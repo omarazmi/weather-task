@@ -6,7 +6,9 @@ const icon = "data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiA/PjxzdmcgaGVp
 
 
 const WeatherInfo = ({ data }) => {
+    data = data || {}
     return (
+        
         <div className="weather-app" >
             <div className="left-container">
                 <h2>{data.cityName}</h2>

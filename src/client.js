@@ -2,15 +2,17 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux'
 
-import './index.css';
 import App from './App';
 import configureStore from './store/configureStore';
 
 import * as serviceWorker from './serviceWorker';
 
-const store = configureStore();
+const state = window.__STATE__;
+// delete window.__STATE__;
 
-ReactDOM.render(
+const store = configureStore(state);
+
+ReactDOM.hydrate(
     <Provider store={store}>
         <App />
     </Provider>

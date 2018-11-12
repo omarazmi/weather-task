@@ -10,10 +10,18 @@ class WeatherContainer extends Component {
         this.state = { currentIndex: 0, cities: [] }
     }
 
+    componentWillMount() {
+        console.log("componentWillMount()")
+        // this.props.getLocationWeatherInfo()
+        // this.interval = setInterval(() => this.rotateCity(), 5000);
+    }
+
     componentDidMount() {
+        console.log("componentDidMount()")
         this.props.getLocationWeatherInfo()
         this.interval = setInterval(() => this.rotateCity(), 5000);
     }
+
 
     rotateCity() {
         let { currentIndex, cities } = this.state
@@ -26,36 +34,43 @@ class WeatherContainer extends Component {
     }
 
     componentWillReceiveProps(newProps) {
+        // if (this.state.cities.length === 0) 
+        console.log("componentWillReceiveProps", newProps)
+        console.log(newProps.weather.cities.length !== this.state.cities.length)
+
         if (newProps.weather.cities.length !== this.state.cities.length) {
+
             this.setState({ cities: newProps.weather.cities })
         }
+
     }
+
     componentWillUnmount() {
         clearInterval(this.interval);
     }
 
-    addNewCity = () => {
+    addNewCity() {
         const city = this.state.inputValue
         fetch(`https://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20weather.forecast%20where%20woeid%20in%20(select%20woeid%20from%20geo.places(1)%20where%20text%3D%22${encodeURIComponent(city)}")&format=json&env=store%3A%2F%2Fdatatables.org%2Falltableswithkeys`)
             .then(response => response.json())
             .then(response => {
-                if(null !== response.query.results) {
-                this.setState({
-                    cities: [
-                        ...this.state.cities,
-                        {
-                            cityName: response.query.results.channel.location.city,
-                            tempCurrent: response.query.results.channel.item.condition.temp,
-                            tempLow: response.query.results.channel.item.forecast[0].low,
-                            tempHigh: response.query.results.channel.item.forecast[0].high,
-                            statusText: response.query.results.channel.item.forecast[0].text,
-                            statusImage: response.query.results.channel.image.url
-                        }
-                    ]
-                })
-            } else {
-                console.log("cann't find the location")
-            }
+                if (null !== response.query.results) {
+                    this.setState({
+                        cities: [
+                            ...this.state.cities,
+                            {
+                                cityName: response.query.results.channel.location.city,
+                                tempCurrent: response.query.results.channel.item.condition.temp,
+                                tempLow: response.query.results.channel.item.forecast[0].low,
+                                tempHigh: response.query.results.channel.item.forecast[0].high,
+                                statusText: response.query.results.channel.item.forecast[0].text,
+                                statusImage: response.query.results.channel.image.url
+                            }
+                        ]
+                    })
+                } else {
+                    console.log("cann't find the location")
+                }
             })
             .catch(err => {
                 console.log(err)
@@ -64,16 +79,23 @@ class WeatherContainer extends Component {
     }
 
     render() {
-        if (this.state.cities.length > 0)
-            return (
-                <div>
-                    <WeatherInfo data={this.state.cities[this.state.currentIndex]} />
-                    <input onChange={(event) => { this.setState({ inputValue: event.target.value }) }} />
-                    <button onClick={this.addNewCity}><label>Add</label></button>
-                </div>
-            )
-        else
-            return (<div>Loading Weather Info</div>);
+        console.log("render")
+        console.log("this.state", this.state)
+        return (
+            // <div>
+            //     {
+            //         this.state.cities.length > 0 ? (
+                        <div>
+                            <WeatherInfo data={this.state.cities[this.state.currentIndex]} />
+                            <input onChange={(event) => { this.setState({ inputValue: event.target.value }) }} />
+                            <button onClick={this.addNewCity.bind(this)}><label>Add</label></button>
+                        </div>
+
+                //     ) : (<div> Loading </div>)
+                // }
+            // </div>
+
+        )
     }
 
 }
@@ -84,7 +106,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        getLocationWeatherInfo: (city) => dispatch(getLocationWeatherInfo(city))
+        getLocationWeatherInfo: () => dispatch(getLocationWeatherInfo())
     };
 };
 
