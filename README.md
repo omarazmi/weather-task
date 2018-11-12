@@ -2,4 +2,6 @@
 
 steps to run 
 - npm install
-- npm start 
+- npm run build && npm run start
+
+the app will run on ```http://localhost:2000/``` which by default load SSR and  ```/client``` will load client app without ssr 
