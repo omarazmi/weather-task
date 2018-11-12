@@ -5,7 +5,6 @@ import { Provider } from 'react-redux'
 import configureStore from './store/configureStore'
 import App from './App'
 
-
 module.exports = function render(initialState) {
   // Configure the store with the initial state provided
   const store = configureStore(initialState)
@@ -13,12 +12,12 @@ module.exports = function render(initialState) {
   // render the App store static markup ins content variable
   let content = renderToString(
     <Provider store={store} >
-       <App />
+      <App />
     </Provider>
   );
 
   // Get a copy of store data to create the same store on client side 
   const preloadedState = store.getState()
 
-  return {content, preloadedState};
+  return { content, preloadedState };
 }

@@ -18,8 +18,9 @@ var getLocationWeatherInfo = function getLocationWeatherInfo() {
   return function (dispatch, getState) {
     console.log("getLocationWeatherInfo", getState().weather);
     var staticCities = getState().weather.preCities;
+    var promises = [];
     staticCities.forEach(function (city) {
-      fetch("https://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20weather.forecast%20where%20woeid%20in%20(select%20woeid%20from%20geo.places(1)%20where%20text%3D%22".concat(encodeURIComponent(city), "\")&format=json&env=store%3A%2F%2Fdatatables.org%2Falltableswithkeys")).then(function (response) {
+      promises.push(fetch("https://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20weather.forecast%20where%20woeid%20in%20(select%20woeid%20from%20geo.places(1)%20where%20text%3D%22".concat(encodeURIComponent(city), "\")&format=json&env=store%3A%2F%2Fdatatables.org%2Falltableswithkeys")).then(function (response) {
         return response.json();
       }).then(function (response) {
         dispatch({
@@ -32,8 +33,9 @@ var getLocationWeatherInfo = function getLocationWeatherInfo() {
           type: GET_WEATHER_FAIL,
           payload: err
         });
-      });
+      }));
     });
+    return promises;
   };
 };
 

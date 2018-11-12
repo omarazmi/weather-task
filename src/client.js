@@ -8,7 +8,7 @@ import configureStore from './store/configureStore';
 import * as serviceWorker from './serviceWorker';
 
 const state = window.__STATE__;
-// delete window.__STATE__;
+delete window.__STATE__;
 
 const store = configureStore(state);
 
