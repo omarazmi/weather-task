@@ -1,8 +1,7 @@
 const express = require('express'),
     app = express(),
     template = require('./views/template'),
-    path = require('path'),
-    request = require('request');
+    path = require('path');
 
 
 // Serving static files
@@ -15,10 +14,7 @@ app.disable('x-powered-by');
 app.listen(process.env.PORT || 2000);
 
 let initialState = {
-    weather: {
-        cities: [],
-        preCities: ['San Diego, CA', 'New York, NY', 'Juneau, AK']
-    }
+    
 }
 
 const getInfo = (city) => {
@@ -39,38 +35,11 @@ const ssr = require('./views/server');
 
 // server rendered home page
 app.get('/', (req, res) => {
-    //make request to call apis on server
-    const allPromises = [];
-
-    initialState.weather.preCities.forEach(city => {
-        allPromises.push(getInfo(city)
-            .then(response => {
-
-                response.query.results.channel && initialState.weather.cities.push(
-                    {
-                        cityName: response.query.results.channel.location.city,
-                        tempCurrent: response.query.results.channel.item.condition.temp,
-                        tempLow: response.query.results.channel.item.forecast[0].low,
-                        tempHigh: response.query.results.channel.item.forecast[0].high,
-                        statusText: response.query.results.channel.item.forecast[0].text,
-                        statusImage: response.query.results.channel.image.url
-                    }
-                )
-            })
-            .catch(err => {
-                console.log(err)
-            })
-        )
-    })
-
-    Promise.all(allPromises).then(() => {
-        const { preloadedState, content } = ssr(initialState)
-        const response = template("Server Rendered Page", preloadedState, content)
+    ssr(initialState).then((resp) => {
+        const response = template("Server Rendered Page", resp.preloadedState, resp.content);
         res.setHeader('Cache-Control', 'assets, max-age=604800')
         res.send(response);
-    
     })
-
 });
 
 // Pure client side rendered page

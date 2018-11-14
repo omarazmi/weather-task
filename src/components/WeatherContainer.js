@@ -12,13 +12,15 @@ class WeatherContainer extends Component {
 
     componentWillMount() {
         console.log("componentWillMount()")
-        // this.props.getLocationWeatherInfo()
-        // this.interval = setInterval(() => this.rotateCity(), 5000);
     }
 
     componentDidMount() {
         console.log("componentDidMount()")
-        this.props.getLocationWeatherInfo()
+        this.setState({ cities: this.props.weather.cities })
+        if (this.props.weather.cities && this.props.weather.cities.length !== 3) {
+            this.props.getLocationWeatherInfo()
+        }
+
         this.interval = setInterval(() => this.rotateCity(), 5000);
     }
 
@@ -34,9 +36,6 @@ class WeatherContainer extends Component {
     }
 
     componentWillReceiveProps(newProps) {
-        // if (this.state.cities.length === 0) 
-        console.log("componentWillReceiveProps", newProps)
-        console.log(newProps.weather.cities.length !== this.state.cities.length)
 
         if (newProps.weather.cities.length !== this.state.cities.length) {
 
